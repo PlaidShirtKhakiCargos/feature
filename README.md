@@ -30,7 +30,7 @@ public FeatureResolver featureResolver() {
 ```
 
 #### PropertiesFeatureResolver
-This uses the Spring Framework core `PropertiesLoaderUtils` to load the properties file. This will also throw a `IOException` during runtime if there is no properties file found.   
+This uses the Spring Framework core `PropertiesLoaderUtils` to load the properties file. This will throw a `RunTimeException` if there is an error processing the properties file.   
 
 |  Constructor Arg | Description | Default |
 | ---        | ---         | ---     |
