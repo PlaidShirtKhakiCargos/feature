@@ -19,10 +19,12 @@ import java.util.Map;
 
 @Aspect
 public class FeatureManager {
-  private static final Logger                       LOGGER             = LoggerFactory.getLogger(FeatureManager.class);
-  private              FeatureResolver              defaultFeatureResolver;
-  private              Map<String, FeatureResolver> FeatureResolverMap = new HashMap<>();
-  private              boolean                      allowNullFeatures;
+  private static final Logger LOGGER = LoggerFactory.getLogger(FeatureManager.class);
+
+  //
+  private FeatureResolver              defaultFeatureResolver;
+  private Map<String, FeatureResolver> FeatureResolverMap = new HashMap<>();
+  private boolean                      allowNullFeatures;
 
   public FeatureManager allowNullFeatures(boolean allowNullFeatures) {
     this.allowNullFeatures = allowNullFeatures;
