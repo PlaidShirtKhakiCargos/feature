@@ -14,7 +14,7 @@ public class PropertiesFeatureResolver extends AbstractPropertiesResolver {
   private String  propertiesPrefix;
   private boolean isNotFoundFeatureEnabled;
 
-  public PropertiesFeatureResolver(String propertiesFile, String propertiesPrefix, boolean isNotFoundFeatureEnabled) throws IOException {
+  public PropertiesFeatureResolver(String propertiesFile, String propertiesPrefix, boolean isNotFoundFeatureEnabled) {
     super(PropertiesUtil.load(propertiesFile), propertiesPrefix, isNotFoundFeatureEnabled);
   }
 }
