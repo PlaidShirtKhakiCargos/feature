@@ -11,17 +11,42 @@ My idea is to add an annotation to web endpoints that are based on any specific 
 
 
 ## Usage
+
+
 ### Configuration
+#### Manual
+The interface `FeatureChecker` has a method called `allowFeature` that should return a boolean to if a feature should be allowed.
+
 ```
 @Bean
 public FeatureResolver featureResolver() {
-    return new FeatureResolver()
-        .addDefaultFeatureChecker(new FeatureChecker() {
-            @Override
-            public boolean allowFeature(String featureName) {
-                return "helloFeature".equals(featureName);
-            }
-        });
+    return new FeatureResolver() {
+        @Override
+        public boolean isAllowed(String featureName) {
+            return "helloFeature".equals(featureName);
+        }
+    };
+}
+```
+
+#### PropertiesFeatureResolver
+This uses the Spring Framework core `PropertiesLoaderUtils` to load the properties file. This will also throw a `IOException` during runtime if there is no properties file found.   
+
+|  Constructor Arg | Description | Default |
+| ---        | ---         | ---     |
+| `propertiesFile` | The properties file to read in | `classpath:features.properties` 
+| `isNotFoundFeatureEnabled` | This tells the resolver how to handle a property that is not found in the properties file. If set to `false` the resolver will treat unknown features as if they were not allowed. | `false` |
+| `propertiesPrefix` | Optional prefix that can be used for features. It will prepend via a `.` (dot) between the prefix and the value passed into the `@Feature`.  | null |
+
+Default usage:
+```
+@Bean
+public FeatureResolver featureResolver() {
+    return PropertiesFeatureResolver.builder()
+        .propertiesFile("")
+        .propertiesPrefix(null)
+        .isNotFoundFeatureEnabled(false)
+        .build();
 }
 ```
 
@@ -29,8 +54,25 @@ public FeatureResolver featureResolver() {
 ```
 @Feature("helloFeature")
 @RequestMapping("/hello")
-public String init(Model model) {
-    model.addAttribute("message", "Hello World!");
-    return "myCoolFeaturePage";
+@ResponseBody
+public String init() {
+    Map<String, Object> response = new HashMap<>();
+
+    System.out.println("This will be displayed");
+    response.put("message", "Hello World!");
+
+    return response;
+}
+
+@Feature("byeFeature")
+@RequestMapping("/bye")
+@ResponseBody
+public String init() {
+    Map<String, Object> response = new HashMap<>();
+
+    System.out.println("This will *NOT* be displayed");
+    response.put("message", "Bye World!");
+
+    return response;
 }
 ```
